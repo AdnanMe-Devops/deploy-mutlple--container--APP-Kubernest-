@@ -1,0 +1,36 @@
+Launch the Azure Cloud Shell from the Azure portal and choose Bash.
+
+Deploy Kubernetes to Azure, using CLI:
+
+i. Get the latest available Kubernetes version in your preferred region into a bash variable. Replace <region> with the region of your choosing, for example eastus.
+
+  version=$(az aks get-versions -l <region> --query 'orchestrators[-1].orchestratorVersion' -o tsv)
+ii. Create a Resource Group
+
+  az group create --name akshandsonlab --location <region>
+iii. Create AKS using the latest version available
+
+ az aks create --resource-group akshandsonlab --name <unique-aks-cluster-name> --enable-addons monitoring --kubernetes-version $version --generate-ssh-keys --location <region>
+ Important: Enter a unique AKS cluster name. AKS name must contain between 3 and 31 characters inclusive. The name can contain only letters, numbers, and hyphens. The name must start with a letter and must end with a letter or a number. The AKS deployment may take 10-15 minutes
+Deploy Azure Container Registry(ACR): Run the below command to create your own private container registry using Azure Container Registry (ACR).
+
+ az acr create --resource-group akshandsonlab --name <unique-acr-name> --sku Standard --location <region>
+ Important: Enter a unique ACR name. ACR name may contain alpha numeric characters only and must be between 5 and 50 characters
+Authenticate with Azure Container Registry from Azure Kubernetes Service : When you’re using Azure Container Registry (ACR) with Azure Kubernetes Service (AKS), an authentication mechanism needs to be established. You can set up the AKS to ACR integration in a few simple commands with the Azure CLI. This integration assigns the AcrPull role to the managed identity associated to the AKS Cluster. Replace the variables $AKS_RESOURCE_GROUP, $AKS_CLUSTER_NAME, $ACR_NAME with appropriate values below and run the command.
+
+ az aks update -n $AKS_CLUSTER_NAME -g $AKS_RESOURCE_GROUP --attach-acr $ACR_NAME
+For more information see document on how to Authenticate with Azure Container Registry from Azure Kubernetes Service
+
+Create Azure SQL server and Database: Create an Azure SQL server.
+
+ az sql server create -l <region> -g akshandsonlab -n <unique-sqlserver-name> -u sqladmin -p P2ssw0rd1234
+Create a database
+
+ az sql db create -g akshandsonlab -s <unique-sqlserver-name> -n mhcdb --service-objective S0
+ Once the release is complete, launch the Azure Cloud Shell and run the below commands to see the pods running in AKS:
+
+ az aks get-credentials --resource-group yourResourceGroup --name yourAKSname in the command prompt to get the access credentials for the Kubernetes cluster. Replace the variables yourResourceGroup and yourAKSname with the actual values.
+
+kubectl get pods
+kubectl get service mhc-front --watch
+Copy the External-IP and paste it in the browser and press the Enter button to launch the application.
