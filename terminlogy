@@ -1,0 +1,9 @@
+Kubernetes{:target="_blank"}: Kubernetes is an open source system for managing containerized applications across multiple hosts, providing basic mechanisms for deployment, maintenance, and scaling of applications.
+
+Pods{:target="_blank"}: A Pod is the basic building block of Kubernetes and represents a executable unit of the work. A Pod usually contains a single container.
+
+Services{:target="_blank"}: A service tells other pods about the services that your application provides.
+
+Deployments{:target="_blank"}: A Deployment controller provides declarative updates for Pods
+
+Kubernetes Manifest file{:target="_blank"}: Kubernetes manifests with deployments, whereas services and pods can be defined in json or yaml. The file extensions .yaml, .yml, and .json can be used.
